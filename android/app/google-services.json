@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "206884506684",
+    "project_id": "epsum-things-7cdc3",
+    "storage_bucket": "epsum-things-7cdc3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206884506684:android:0c273838f3c65860acc739",
+        "android_client_info": {
+          "package_name": "com.easyagrotech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206884506684-o68pd6l91shfac9qv59njcsmhtv3gm7e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsqpsUSNg_M7hfZpzJFEE7SRexYsK0Xos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206884506684-o68pd6l91shfac9qv59njcsmhtv3gm7e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206884506684:android:6e05586caf22a23facc739",
+        "android_client_info": {
+          "package_name": "com.epsumthings"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206884506684-o68pd6l91shfac9qv59njcsmhtv3gm7e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsqpsUSNg_M7hfZpzJFEE7SRexYsK0Xos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206884506684-o68pd6l91shfac9qv59njcsmhtv3gm7e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

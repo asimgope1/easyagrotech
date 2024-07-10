@@ -1,0 +1,4 @@
+export const LOADING_START = 'LOADING_START';
+export const LOADING_END = 'LOADING_END';
+export const ACCESS_TOKEN = 'ACCESS_TOKEN';
+export const CURRENT_INDEX = 'CURRENT_INDEX';

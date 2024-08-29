@@ -9,6 +9,7 @@ import * as RootNavigation from '../lib/Rootnavigation';
 import {BASEURL, CRYPTIC_STRING, REQUEST_METHOD} from '../lib/Constant';
 import {Base64} from 'js-base64';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CommonActions} from '@react-navigation/native';
 
 export function userLogin(email, password, deviceToken) {
   //   console.log('userLogin', deviceToken);
@@ -38,6 +39,32 @@ export function userLogin(email, password, deviceToken) {
       null,
       CRYPTIC_STRING.AUTHENTICATE,
     );
+  };
+}
+
+export function userLogout() {
+  return async function (dispatch) {
+    dispatch({type: LOADING_START});
+
+    try {
+      // Remove the stored user token from AsyncStorage
+      await AsyncStorage.removeItem('logindetails');
+
+      // Reset the access token state in the Redux store
+      dispatch({type: ACCESS_TOKEN, payload: null});
+
+      // Navigate to the login screen and reset the navigation stack
+      RootNavigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'Login'}],
+        }),
+      );
+    } catch (error) {
+      console.error('Error clearing user data:', error);
+    } finally {
+      dispatch({type: LOADING_END});
+    }
   };
 }
 export function onForgotPassword(email) {

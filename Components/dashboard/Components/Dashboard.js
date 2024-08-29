@@ -85,6 +85,7 @@ class Dashboard extends Component {
   }
 
   renderThingItem = ({item}) => (
+    // console.log('teeeee', item);
     <View
       style={{
         borderRadius: 15,

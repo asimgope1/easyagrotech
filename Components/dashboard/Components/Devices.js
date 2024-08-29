@@ -135,10 +135,10 @@ export default class Devices extends Component {
     var Item;
     console.log(
       'this.props.thing_details.curr_state',
-      this.props.thing_details,
+      this.props?.thing_details,
     );
-    this.props.thing_details.length > 0 &&
-      this.props.thing_details.map((item, index) => {
+    this.props?.thing_details?.length > 0 &&
+      this.props?.thing_details?.map((item, index) => {
         Item = item;
       });
     console.log('item', Item);
@@ -182,10 +182,27 @@ export default class Devices extends Component {
             />
           ),
         image2: (
-            <View style={{ display: "flex", flexDirection: "row", alignItems: "center", width: "100%", }}>
-            <Image source={require('../../Images/feed.png')} style={{ height: 23, width: 23, marginLeft: 10, marginRight: 7 }} />
-            <Text style={{ fontSize: 10, fontWeight: "bold", color: "black", paddingLeft: 8 }}>Feed</Text>
-        </View>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              width: '100%',
+            }}>
+            <Image
+              source={require('../../Images/feed.png')}
+              style={{height: 23, width: 23, marginLeft: 10, marginRight: 7}}
+            />
+            <Text
+              style={{
+                fontSize: 10,
+                fontWeight: 'bold',
+                color: 'black',
+                paddingLeft: 8,
+              }}>
+              Feed
+            </Text>
+          </View>
         ),
         button2:
           this.props.thing_details?.curr_state &&
@@ -202,6 +219,18 @@ export default class Devices extends Component {
           ),
       },
     ];
+    console.log('thing_details:', this.props?.thing_details);
+    console.log('Type of thing_details:', typeof this.props?.thing_details);
+    console.log('Length of thing_details:', this.props?.thing_details?.length);
+    const isEmpty = Object.keys(this.props?.thing_details).length === 0;
+    if (isEmpty) {
+      return (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text>No data available</Text>
+        </View>
+      );
+    }
+
     return (
       <ScrollView>
         <View>
@@ -460,11 +489,13 @@ export default class Devices extends Component {
                       paddingTop: 4,
                     }}>
                     Current Temp-
-                    {this.props.thing_details.curr_state &&
-                      this.props.thing_details.curr_state[25]<0 ? "+++" : this.props.thing_details.curr_state[25]}
-                    {this.props.thing_details.thing_schema &&
-                      this.props.thing_details.thing_schema[25] &&
-                      this.props.thing_details.thing_schema[25].unit}
+                    {this.props?.thing_details.curr_state &&
+                    this.props?.thing_details.curr_state[25] < 0
+                      ? '+++'
+                      : this?.props?.thing_details.curr_state[25]}
+                    {this?.props?.thing_details.thing_schema &&
+                      this?.props?.thing_details.thing_schema[25] &&
+                      this?.props?.thing_details.thing_schema[25].unit}
                   </Text>
                 </View>
               </View>
@@ -527,7 +558,9 @@ export default class Devices extends Component {
                     }}>
                     Current Humidity-{' '}
                     {this.props.thing_details.curr_state &&
-                      this.props.thing_details.curr_state[6]<0 ? "+++" : this.props.thing_details.curr_state[6]}
+                    this.props.thing_details.curr_state[6] < 0
+                      ? '+++'
+                      : this.props.thing_details.curr_state[6]}
                     {this.props.thing_details.thing_schema &&
                       this.props.thing_details.thing_schema[6] &&
                       this.props.thing_details.thing_schema[6].unit}
@@ -682,7 +715,9 @@ export default class Devices extends Component {
                     }}>
                     Current Temp-
                     {this.props.thing_details.curr_state &&
-                      this.props.thing_details.curr_state[27]<0 ? "+++" : this.props.thing_details.curr_state[27]}
+                    this.props.thing_details.curr_state[27] < 0
+                      ? '+++'
+                      : this.props.thing_details.curr_state[27]}
                     {this.props.thing_details.thing_schema &&
                       this.props.thing_details.thing_schema[27] &&
                       this.props.thing_details.thing_schema[27].unit}
@@ -748,7 +783,9 @@ export default class Devices extends Component {
                     }}>
                     Curr CO2-
                     {this.props.thing_details.curr_state &&
-                      this.props.thing_details.curr_state[7]<=0?"+++" : this.props.thing_details.curr_state[7]}
+                    this.props.thing_details.curr_state[7] <= 0
+                      ? '+++'
+                      : this.props.thing_details.curr_state[7]}
                     {this.props.thing_details.thing_schema &&
                       this.props.thing_details.thing_schema[7] &&
                       this.props.thing_details.thing_schema[7].unit}
@@ -814,7 +851,9 @@ export default class Devices extends Component {
                     }}>
                     Curr NH3-
                     {this.props.thing_details.curr_state &&
-                      this.props.thing_details.curr_state[8]<=0?"+++" : this.props.thing_details.curr_state[8]}
+                    this.props.thing_details.curr_state[8] <= 0
+                      ? '+++'
+                      : this.props.thing_details.curr_state[8]}
                     {this.props.thing_details.thing_schema &&
                       this.props.thing_details.thing_schema[8] &&
                       this.props.thing_details.thing_schema[8].unit}
@@ -966,7 +1005,9 @@ export default class Devices extends Component {
                     }}>
                     Current Temp-
                     {this.props.thing_details.curr_state &&
-                      this.props.thing_details.curr_state[26]<0 ? "+++" : this.props.thing_details.curr_state[26]}
+                    this.props.thing_details.curr_state[26] < 0
+                      ? '+++'
+                      : this.props.thing_details.curr_state[26]}
                     {this.props.thing_details.thing_schema &&
                       this.props.thing_details.thing_schema[26] &&
                       this.props.thing_details.thing_schema[26].unit}
@@ -1032,7 +1073,9 @@ export default class Devices extends Component {
                     }}>
                     Curr CO2-
                     {this.props.thing_details.curr_state &&
-                      this.props.thing_details.curr_state[7]<=0?"+++" : this.props.thing_details.curr_state[7]}
+                    this.props.thing_details.curr_state[7] <= 0
+                      ? '+++'
+                      : this.props.thing_details.curr_state[7]}
                     {this.props.thing_details.thing_schema &&
                       this.props.thing_details.thing_schema[7] &&
                       this.props.thing_details.thing_schema[7].unit}
@@ -1098,7 +1141,9 @@ export default class Devices extends Component {
                     }}>
                     Curr NH3-
                     {this.props.thing_details.curr_state &&
-                      this.props.thing_details.curr_state[8]<=0?"+++" : this.props.thing_details.curr_state[8]}
+                    this.props.thing_details.curr_state[8] <= 0
+                      ? '+++'
+                      : this.props.thing_details.curr_state[8]}
                     {this.props.thing_details.thing_schema &&
                       this.props.thing_details.thing_schema[8] &&
                       this.props.thing_details.thing_schema[8].unit}
@@ -1161,12 +1206,18 @@ export default class Devices extends Component {
                   </Text>
                 </View>
                 <View>
-                  <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
-                                    
-                                      
-                                            <Text>SET_POINT : {this.props.thing_details.curr_state && this.props.thing_details.curr_state[53]}</Text>
-                                    
-                                </View>
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                    }}>
+                    <Text>
+                      SET_POINT :{' '}
+                      {this.props.thing_details.curr_state &&
+                        this.props.thing_details.curr_state[53]}
+                    </Text>
+                  </View>
                   <View
                     style={{
                       display: 'flex',
@@ -1403,7 +1454,9 @@ export default class Devices extends Component {
                     }}>
                     Current Temp-
                     {this.props.thing_details.curr_state &&
-                      this.props.thing_details.curr_state[47]<0 ? "+++" : this.props.thing_details.curr_state[47]}
+                    this.props.thing_details.curr_state[47] < 0
+                      ? '+++'
+                      : this.props.thing_details.curr_state[47]}
                     {this.props.thing_details.thing_schema &&
                       this.props.thing_details.thing_schema[47] &&
                       this.props.thing_details.thing_schema[47].unit}
@@ -1469,7 +1522,9 @@ export default class Devices extends Component {
                     }}>
                     Current Humidity-{' '}
                     {this.props.thing_details.curr_state &&
-                      this.props.thing_details.curr_state[6]<0 ? "+++" : this.props.thing_details.curr_state[6]}
+                    this.props.thing_details.curr_state[6] < 0
+                      ? '+++'
+                      : this.props.thing_details.curr_state[6]}
                     {this.props.thing_details.thing_schema &&
                       this.props.thing_details.thing_schema[6] &&
                       this.props.thing_details.thing_schema[6].unit}
@@ -1484,8 +1539,8 @@ export default class Devices extends Component {
               height: HEIGHT / 5.8,
               width: '90%',
               alignSelf: 'center',
-              marginBottom: "15%",
-              marginTop: "10%",
+              marginBottom: '15%',
+              marginTop: '10%',
             }}>
             <View
               style={{

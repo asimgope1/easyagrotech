@@ -12,11 +12,48 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Base64} from 'js-base64';
 import {HEIGHT} from '../constants/config';
+import {BASE_URL} from '../constants/url';
 
-const ChangepasswordModal = ({openmodal, onClosemodal}) => {
+const ChangepasswordModal = ({openmodal, onClosemodal, token}) => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [renewPassword, setRenewPassword] = useState('');
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showRenewPassword, setShowRenewPassword] = useState(false);
+
+  const changePassword = body => {
+    console.log('bod', body);
+    const accessToken = token; // Replace with your actual access token
+
+    const requestUrl = `${BASE_URL}/user/profile/`; // Replace BASEURL with your actual base URL
+
+    const options = {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(body),
+    };
+
+    fetch(requestUrl, options)
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson.status === 'success') {
+          // Assuming you have a function to fetch user details after a successful update
+          // getUserDetails(accessToken);
+          alert('Profile Updated Successfully');
+        } else {
+          alert('Error: ' + responseJson.msg);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong. Error: ' + error);
+      });
+  };
 
   const handlePasswordChange = () => {
     if (!oldPassword || !newPassword || !renewPassword) {
@@ -35,11 +72,12 @@ const ChangepasswordModal = ({openmodal, onClosemodal}) => {
     };
 
     console.log('Encoded passwords:', body);
+    changePassword(body);
     onClosemodal();
   };
 
   return (
-    <Modal isVisible={openmodal}>
+    <Modal visible={openmodal} onRequestClose={onClosemodal} transparent={true}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <View style={styles.header}>
@@ -50,6 +88,7 @@ const ChangepasswordModal = ({openmodal, onClosemodal}) => {
           </View>
 
           <View style={styles.content}>
+            {/* Old Password Input */}
             <View style={styles.textInputBox}>
               <FontAwesome
                 name="lock"
@@ -60,12 +99,22 @@ const ChangepasswordModal = ({openmodal, onClosemodal}) => {
               <TextInput
                 placeholder="Old Password"
                 style={styles.input}
-                secureTextEntry
+                secureTextEntry={!showOldPassword}
                 onChangeText={setOldPassword}
                 value={oldPassword}
               />
+              <TouchableOpacity
+                onPress={() => setShowOldPassword(!showOldPassword)}
+                style={styles.eyeIcon}>
+                <Entypo
+                  name={showOldPassword ? 'eye' : 'eye-with-line'}
+                  size={20}
+                  color="#1c9b74"
+                />
+              </TouchableOpacity>
             </View>
 
+            {/* New Password Input */}
             <View style={styles.textInputBox}>
               <FontAwesome
                 name="lock"
@@ -76,12 +125,22 @@ const ChangepasswordModal = ({openmodal, onClosemodal}) => {
               <TextInput
                 placeholder="New Password"
                 style={styles.input}
-                secureTextEntry
+                secureTextEntry={!showNewPassword}
                 onChangeText={setNewPassword}
                 value={newPassword}
               />
+              <TouchableOpacity
+                onPress={() => setShowNewPassword(!showNewPassword)}
+                style={styles.eyeIcon}>
+                <Entypo
+                  name={showNewPassword ? 'eye' : 'eye-with-line'}
+                  size={20}
+                  color="#1c9b74"
+                />
+              </TouchableOpacity>
             </View>
 
+            {/* Confirm Password Input */}
             <View style={styles.textInputBox}>
               <FontAwesome
                 name="lock"
@@ -92,10 +151,19 @@ const ChangepasswordModal = ({openmodal, onClosemodal}) => {
               <TextInput
                 placeholder="Confirm Password"
                 style={styles.input}
-                secureTextEntry
+                secureTextEntry={!showRenewPassword}
                 onChangeText={setRenewPassword}
                 value={renewPassword}
               />
+              <TouchableOpacity
+                onPress={() => setShowRenewPassword(!showRenewPassword)}
+                style={styles.eyeIcon}>
+                <Entypo
+                  name={showRenewPassword ? 'eye' : 'eye-with-line'}
+                  size={20}
+                  color="#1c9b74"
+                />
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity
@@ -110,77 +178,75 @@ const ChangepasswordModal = ({openmodal, onClosemodal}) => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = {
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalView: {
+    width: '90%',
+    height: HEIGHT * 0.5,
     backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    height: HEIGHT / 2,
-    width: '90%',
   },
   header: {
-    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
-    backgroundColor: '#1c9b74',
-    alignItems: 'center',
-  },
-  headerText: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: '#fff',
-  },
-  closeButton: {
-    backgroundColor: '#fff',
-    borderRadius: 50,
-    padding: 5,
-  },
-  content: {
-    height: '80%',
-    paddingTop: 30,
-  },
-  textInputBox: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#1c9b74',
-    width: '85%',
-    alignSelf: 'center',
-    borderRadius: 7,
-    paddingHorizontal: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  input: {
     width: '100%',
   },
-  updateButton: {
-    height: '40%',
-    justifyContent: 'center',
-    width: '70%',
-    borderRadius: 10,
-    alignSelf: 'center',
-    marginTop: 20,
-    backgroundColor: '#1c9b74',
-  },
-  updateButtonText: {
-    fontSize: 15,
-    textAlign: 'center',
-    color: '#fff',
+  headerText: {
+    fontSize: 18,
     fontWeight: 'bold',
   },
-});
+  closeButton: {
+    padding: 10,
+  },
+  content: {
+    width: '100%',
+    marginTop: 20,
+  },
+  textInputBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1c9b74',
+  },
+  input: {
+    flex: 1,
+    paddingLeft: 10,
+    paddingVertical: 5,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  eyeIcon: {
+    padding: 5,
+  },
+  updateButton: {
+    backgroundColor: '#1c9b74',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  updateButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+};
 
 export default ChangepasswordModal;

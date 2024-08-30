@@ -18,6 +18,7 @@ import {BASE_URL} from '../../constants/url';
 import {GETNETWORK, POSTNETWORK} from '../../utils/Network';
 import {BLACK} from '../../constants/color';
 import Loader from '../../components/Loader';
+import ChangepasswordModal from '../../components/ChangepasswordModal';
 
 const Profile = ({user_details}) => {
   // State management using useState
@@ -29,6 +30,7 @@ const Profile = ({user_details}) => {
   const [TimeZone, setTimeZone] = useState('');
   const [country, setcountry] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [token, SetToken] = useState('');
 
   useEffect(() => {
     getUserData();
@@ -59,29 +61,52 @@ const Profile = ({user_details}) => {
   };
 
   const Gettoken = async () => {
+    setLoader(true);
     let loginRes = await getObjByKey('loginResponse');
-    console.log('res', loginRes);
+    console.log('Gettoken', loginRes);
+    setLoader(false);
+    SetToken(loginRes?.data?.access_token);
   };
 
   const onUpdate = () => {
-    const url = `${BASE_URL}/user/profile/`;
+    setLoader(true);
+    const url = `${BASE_URL}/user/profile/`; // Replace BASE_URL with your actual base URL
 
-    const Body = {
-      name: fullName,
-      phone: mobileNo,
-      country: country,
-      timezone: TimeZone,
+    // Body with dynamic profile data
+    const body = {
+      name: fullName, // Replace fullName with the actual full name variable
+      phone: mobileNo, // Replace mobileNo with the actual mobile number variable
+      country: country, // Replace country with the actual country variable
+      timezone: TimeZone, // Replace TimeZone with the actual timezone variable
     };
-    POSTNETWORK(url, Body, true)
-      .then(res => {
-        console.log('red', res);
-        if (res.status === 'success') {
+
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`, // Replace accessToken with your actual access token
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(body),
+    };
+
+    fetch(url, options)
+      .then(response => response.json())
+      .then(responseJson => {
+        setLoader(false);
+        if (responseJson.status === 'success') {
+          console.log('Profile updated successfully:', responseJson);
+          // Call getUserDetails or any other action needed after a successful update
+          getUserData();
+          alert('Profile Updated Successfully');
         } else {
-          Alert.alert('Error', res.msg);
+          console.error('Error updating profile:', responseJson.msg);
+          Alert.alert('Error', responseJson.msg);
         }
       })
       .catch(error => {
         console.error('Error getting user data:', error);
+        alert('Something went wrong. Error: ' + error);
       });
   };
 
@@ -103,8 +128,6 @@ const Profile = ({user_details}) => {
   return (
     <Fragment>
       <View style={styles.container}>
-        {/* <ChangepasswordModal openmodal={openModal} onClosemodal={() => setOpenModal(false)} /> */}
-
         <View style={styles.topContainer}>
           <View style={styles.profileBanner}></View>
           <View style={styles.profileDetails}>
@@ -173,6 +196,11 @@ const Profile = ({user_details}) => {
         </View>
       </View>
       <Loader visible={loader} />
+      <ChangepasswordModal
+        openmodal={openModal}
+        onClosemodal={() => setOpenModal(false)}
+        token={token}
+      />
     </Fragment>
   );
 };

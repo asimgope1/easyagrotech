@@ -318,57 +318,70 @@ const ThingsDetails = ({selectedItem}) => {
 
     setLoading(true);
 
+    // Close any existing WebSocket connection
     if (websocket) {
       console.log('Closing existing WebSocket...');
       websocket.close();
     }
 
+    // Check if there is a selected item with a thing_id
     if (selectedItem.thing_id) {
       const WEBSOCKET_URL = `${ws_baseurl}/thing/r/${thing_id}/`;
       console.log('WEBSOCKET_URL:', WEBSOCKET_URL);
 
+      // Create a new WebSocket connection
       const newWebSocket = new WebSocket(WEBSOCKET_URL);
 
+      // Set a timeout for the initial connection
       const timeoutId = setTimeout(() => {
-        console.log(
-          'WebSocket connection timeout reached. Closing connection...',
-        );
-        newWebSocket.close();
-        setLoading(false);
-      }, 30000); // 60 seconds timeout
+        console.log('WebSocket connection timeout reached.');
+        alert('WebSocket connection timed out. Showing earlier readings.');
+        setLoading(false); // Hide loader after timeout
+        // Optionally, handle reconnection logic here
+      }, 30000); // 30 seconds timeout
 
+      // Handle WebSocket connection open event
       newWebSocket.onopen = () => {
         console.log('WebSocket connection opened.');
+        clearTimeout(timeoutId); // Clear the timeout once the connection opens
+        setLoading(false); // Hide loader when connection is established
       };
 
+      // Handle incoming WebSocket messages
       newWebSocket.onmessage = message => {
         clearTimeout(timeoutId); // Clear the timeout if a message is received
         const Data = JSON.parse(message?.data);
         console.log('Data received:', Data);
+        alert('New data received. Updating readings.');
         setThingDetails(Data);
         setfetched(true);
-        setLoading(false);
+        setLoading(false); // Hide loader after data is processed
       };
 
+      // Handle WebSocket closure
       newWebSocket.onclose = () => {
         clearTimeout(timeoutId); // Clear the timeout on close
-        alert(`Response timeOut Showing the earlier readings`);
-
         console.log('WebSocket connection closed.');
-        setLoading(false);
+        alert('WebSocket connection closed. Showing earlier readings.');
+        setLoading(false); // Hide loader when connection is closed
       };
 
+      // Handle WebSocket errors
       newWebSocket.onerror = error => {
         clearTimeout(timeoutId); // Clear the timeout on error
         console.error('WebSocket error:', error);
-        setLoading(false);
+        alert(
+          'WebSocket encountered an error. Please check your connection and try again.',
+        );
+        setLoading(false); // Hide loader on error
       };
 
+      // Save the WebSocket instance to state or a variable to manage it later
       setWebSocket(newWebSocket);
       console.log('WebSocket connected');
     } else {
       console.error('No thing_id selected, cannot connect WebSocket.');
-      setLoading(false);
+      setLoading(false); // Hide loader if no thing_id is available
     }
   };
 

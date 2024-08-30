@@ -11,14 +11,38 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {HEIGHT} from '../constants/config';
+import {BASE_URL} from '../constants/url';
 
 const ForgotPasswordModal = ({isVisible, onCloseModal}) => {
   const [email, setEmail] = useState('');
 
   const handleForgotPassword = () => {
     if (email) {
-      Alert.alert('Password reset instructions sent to:', email);
-      onCloseModal();
+      const requestUrl = `${BASE_URL}/user/forgotpassword/?email=${email}`; // Make sure to encode the email to handle special characters
+
+      const options = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      };
+
+      fetch(requestUrl, options)
+        .then(response => response.json())
+        .then(responseJson => {
+          if (responseJson.status === 'success') {
+            alert(responseJson.msg);
+            // Perform any additional actions here, like dispatching actions or updating the state
+            onCloseModal();
+          } else {
+            alert('Error: ' + responseJson.msg);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Something went wrong. Error: ' + error);
+        });
     } else {
       Alert.alert('Please enter your email');
     }
